@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: stolckr-backend
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "./start.sh"
+    plan: free
+    pythonVersion: "3.11.8"
+    healthCheckPath: "/api/v1/health"
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.8"
+      - key: PIP_PREFER_BINARY
+        value: "1"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG_MODE
+        value: "False"
+      - key: LOG_LEVEL
+        value: "INFO"
