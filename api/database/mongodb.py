@@ -19,6 +19,11 @@ class MongoDB:
     async def connect(self):
         """Connect to MongoDB"""
         try:
+            # Skip connection if no connection string provided
+            if not settings.mongodb_connection_string or settings.mongodb_connection_string == "":
+                logger.warning("No MongoDB connection string provided, skipping MongoDB connection")
+                return
+            
             self.client = AsyncIOMotorClient(
                 settings.mongodb_connection_string,
                 serverSelectionTimeoutMS=5000,
@@ -38,8 +43,8 @@ class MongoDB:
             logger.info("Connected to MongoDB successfully")
             
         except Exception as e:
-            logger.error(f"Failed to connect to MongoDB: {str(e)}")
-            raise
+            logger.warning(f"MongoDB connection failed, continuing without database: {str(e)}")
+            # Don't raise exception - allow app to start without DB
     
     async def disconnect(self):
         """Disconnect from MongoDB"""
