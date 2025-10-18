@@ -53,7 +53,7 @@ async def lifespan(app: FastAPI):
 # Create FastAPI app
 app = FastAPI(
     title="Stock Market Prediction API",
-    description="AI-powered stock market prediction and analysis API",
+    description="Data-driven stock market prediction and analysis API",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
@@ -83,7 +83,7 @@ app.include_router(stocks.router, prefix="/api/v1", tags=["Stocks"])
 app.include_router(predictions.router, prefix="/api/v1", tags=["Predictions"])
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
 app.include_router(watchlist.router, prefix="/api/v1", tags=["Watchlist"])
-app.include_router(ai_insights.router, prefix="/api/v1", tags=["AI Insights"])
+app.include_router(ai_insights.router, prefix="/api/v1", tags=["Data Insights"])
 app.include_router(simple_paper_trading.router, prefix="/api/v1", tags=["Simple Paper Trading"])
 app.include_router(xp_goals.router, prefix="/api/v1/xp", tags=["XP & Goals"])
 app.include_router(dashboard.router, prefix="/api/v1/dashboard", tags=["Dashboard"])
@@ -96,10 +96,10 @@ async def root():
     return {
         "message": "Stock Market Prediction API",
         "version": "2.0.0",
-        "description": "AI-powered stock market prediction with multiple models, AI insights, and paper trading",
+        "description": "Data-driven stock market prediction with multiple models, data insights, and paper trading",
         "features": {
             "prediction_models": ["Moving Average", "LSTM", "ARIMA", "Linear Regression", "Random Forest", "XGBoost", "SVR"],
-            "ai_insights": "Buy/Sell/Hold recommendations with confidence scores",
+            "data_insights": "Buy/Sell/Hold recommendations with confidence scores",
             "paper_trading": "Virtual portfolio management and trading simulation",
             "user_roles": ["Beginner", "Casual", "Paper Trader"],
             "real_time_data": "Live stock prices and market data"
@@ -108,7 +108,7 @@ async def root():
             "docs": "/docs",
             "health": "/api/v1/health",
             "predictions": "/api/v1/predictions",
-            "ai_insights": "/api/v1/insights",
+            "data_insights": "/api/v1/insights",
             "paper_trading": "/api/v1/paper-trading",
             "stocks": "/api/v1/stocks",
             "auth": "/api/v1/auth"

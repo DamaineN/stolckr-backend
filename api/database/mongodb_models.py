@@ -74,7 +74,7 @@ class XPActivityType(str, Enum):
     PREDICTION_USED = "prediction_used"
     STOCK_ADDED_WATCHLIST = "stock_added_watchlist"
     DAILY_LOGIN = "daily_login"
-    AI_INSIGHT_VIEWED = "ai_insight_viewed"
+    AI_INSIGHT_VIEWED = "data_insight_viewed"
     PROFILE_COMPLETED = "profile_completed"
     QUIZ_PASSED = "quiz_passed"
     TRADING_ACTION = "trading_action"
@@ -365,7 +365,7 @@ class InvestmentGoal(BaseModel):
         arbitrary_types_allowed=True
     )
 
-# AI Insights and Recommendations (from Use Case: A.I. Insight, Buy/Sell/Hold Recommendations)
+# Data-driven Insights and Recommendations (from Use Case: Data Analysis, Buy/Sell/Hold Recommendations)
 class AIInsight(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     symbol: str

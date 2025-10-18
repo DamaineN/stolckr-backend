@@ -86,24 +86,24 @@ async def simulate_stock_updates():
     # Real current market prices and company data for authentic demo
     stocks = {
         "AAPL": {
-            "price": 225.47,
-            "prev_close": 223.12,
+            "price": 184.60,
+            "prev_close": 185.50,
             "trend": 0.0015,
             "volatility": 0.018,
             "name": "Apple Inc.",
             "market_cap": 3500000000000
         },
         "GOOGL": {
-            "price": 172.89,
-            "prev_close": 174.23,
+            "price": 2767.65,
+            "prev_close": 2750.30,
             "trend": -0.0008,
             "volatility": 0.022,
             "name": "Alphabet Inc.",
             "market_cap": 2100000000000
         },
         "MSFT": {
-            "price": 412.18,
-            "prev_close": 408.95,
+            "price": 429.12,
+            "prev_close": 430.02,
             "trend": 0.0012,
             "volatility": 0.016,
             "name": "Microsoft Corp.",

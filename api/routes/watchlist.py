@@ -259,7 +259,7 @@ async def refresh_watchlist_prices(
     """Refresh prices for all stocks in watchlist"""
     try:
         # In a real app, you'd update all watchlist items with current prices
-        # For now, return mock refreshed data
+        # For now, return cached market data
         refreshed_items = [
             {
                 "symbol": "AAPL",

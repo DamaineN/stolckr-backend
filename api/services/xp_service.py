@@ -345,11 +345,11 @@ class XPService:
         )
     
     async def track_ai_insight_view(self, user_id: str, symbol: str) -> Dict[str, Any]:
-        """Track viewing AI insights"""
+        """Track viewing data insights"""
         return await self.award_xp(
             user_id=user_id,
             activity_type=XPActivityType.AI_INSIGHT_VIEWED,
-            description=f"Viewed AI insights for {symbol}",
+            description=f"Viewed data insights for {symbol}",
             related_entity=symbol
         )
     

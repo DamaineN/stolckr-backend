@@ -1,5 +1,5 @@
 """
-AI Insights API routes - Buy/Sell/Hold recommendations based on multiple models
+Data Analytics API routes - Buy/Sell/Hold recommendations based on multiple models
 """
 from fastapi import APIRouter, HTTPException, Depends, Query
 from typing import Optional, List, Dict, Any
@@ -39,19 +39,19 @@ class InsightResponse(BaseModel):
     expires_at: datetime
 
 @router.post("/insights/generate", response_model=InsightResponse)
-async def generate_ai_insight(
+async def generate_data_insight(
     request: InsightRequest,
     current_user: Dict = Depends(get_current_user),
     db = Depends(get_database)
 ):
-    """Generate AI insight and recommendation for a single stock"""
+    """Generate data-driven insight and recommendation for a single stock"""
     try:
-        ai_service = AIInsightsService()
+        analytics_service = AIInsightsService()
         
         # Determine user role from profile or request
         user_role = request.user_role or "beginner"
         
-        insight = await ai_service.generate_insight(
+        insight = await analytics_service.generate_insight(
             symbol=request.symbol.upper(),
             user_role=user_role
         )
@@ -62,7 +62,7 @@ async def generate_ai_insight(
                 detail=f"Error generating insight for {request.symbol}: {insight['error']}"
             )
         
-        # Award XP for viewing AI insight
+        # Award XP for viewing data insight
         try:
             xp_service = XPService(db)
             await xp_service.track_ai_insight_view(
@@ -78,7 +78,7 @@ async def generate_ai_insight(
     except Exception as e:
         raise HTTPException(
             status_code=500,
-            detail=f"Error generating AI insight: {str(e)}"
+            detail=f"Error generating data insight: {str(e)}"
         )
 
 @router.post("/insights/multiple")
@@ -86,7 +86,7 @@ async def generate_multiple_insights(
     request: MultipleInsightRequest,
     current_user: Dict = Depends(get_current_user)
 ):
-    """Generate AI insights for multiple stocks"""
+    """Generate data-driven insights for multiple stocks"""
     try:
         if len(request.symbols) > 10:
             raise HTTPException(
@@ -94,10 +94,10 @@ async def generate_multiple_insights(
                 detail="Maximum 10 symbols allowed per request"
             )
         
-        ai_service = AIInsightsService()
+        analytics_service = AIInsightsService()
         user_role = request.user_role or "beginner"
         
-        insights = await ai_service.get_multiple_insights(
+        insights = await analytics_service.get_multiple_insights(
             symbols=[s.upper() for s in request.symbols],
             user_role=user_role
         )
@@ -121,11 +121,11 @@ async def get_insight_for_symbol(
     user_role: Optional[str] = Query(default="beginner", description="User role for personalized insights"),
     current_user: Dict = Depends(get_current_user)
 ):
-    """Get AI insight for a specific symbol (convenience endpoint)"""
+    """Get data-driven insight for a specific symbol (convenience endpoint)"""
     try:
-        ai_service = AIInsightsService()
+        analytics_service = AIInsightsService()
         
-        insight = await ai_service.generate_insight(
+        insight = await analytics_service.generate_insight(
             symbol=symbol.upper(),
             user_role=user_role
         )
@@ -156,9 +156,9 @@ async def get_watchlist_insights(
         # In a real implementation, you'd fetch the user's actual watchlist from the database
         default_watchlist = ["AAPL", "GOOGL", "MSFT", "TSLA", "AMZN"]
         
-        ai_service = AIInsightsService()
+        analytics_service = AIInsightsService()
         
-        insights = await ai_service.get_multiple_insights(
+        insights = await analytics_service.get_multiple_insights(
             symbols=default_watchlist,
             user_role=user_role
         )
@@ -212,9 +212,9 @@ async def get_market_overview(
         # Major market stocks for overview
         market_stocks = ["SPY", "QQQ", "AAPL", "MSFT", "GOOGL", "AMZN", "TSLA", "NVDA"]
         
-        ai_service = AIInsightsService()
+        analytics_service = AIInsightsService()
         
-        insights = await ai_service.get_multiple_insights(
+        insights = await analytics_service.get_multiple_insights(
             symbols=market_stocks,
             user_role=user_role
         )
@@ -279,9 +279,9 @@ async def get_recommendation_summary(
             # Default popular stocks
             symbol_list = ["AAPL", "MSFT", "GOOGL", "AMZN", "TSLA", "META", "NVDA", "NFLX"]
         
-        ai_service = AIInsightsService()
+        analytics_service = AIInsightsService()
         
-        insights = await ai_service.get_multiple_insights(
+        insights = await analytics_service.get_multiple_insights(
             symbols=symbol_list,
             user_role=user_role
         )

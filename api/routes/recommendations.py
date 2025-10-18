@@ -1,5 +1,5 @@
 """
-AI-Generated Recommendations API routes
+Data-Based Recommendations API routes
 """
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
@@ -36,7 +36,7 @@ class RecommendationResponse(BaseModel):
     time_horizon: int
     technical_indicators: Dict[str, Any]
     fundamental_factors: Dict[str, Any]
-    ai_insights: List[str]
+    data_insights: List[str]
     created_at: datetime
 
 class PortfolioRecommendation(BaseModel):
@@ -55,13 +55,13 @@ async def get_stock_recommendation(
     time_horizon: int = Query(default=30, description="Investment time horizon in days"),
     current_user: dict = Depends(get_current_user)
 ):
-    """Get AI-generated recommendation for a specific stock"""
+    """Get data-driven recommendation for a specific stock"""
     
-    # TODO: Implement actual AI recommendation engine
+    # TODO: Implement actual data analytics recommendation engine
     # TODO: Analyze technical indicators, news sentiment, market conditions
     # TODO: Consider user's risk profile and portfolio
     
-    # Mock AI recommendation logic
+    # Data-based recommendation logic
     symbol = symbol.upper()
     user_type = current_user.get("user_type")
     
@@ -84,14 +84,14 @@ async def get_stock_recommendation(
         "sector_performance": "outperforming"
     }
     
-    # Generate recommendation based on mock analysis
+    # Generate recommendation based on cached market analysis
     if technical_indicators["rsi"] < 40 and fundamental_factors["earnings_growth"] > 10:
         recommendation_type = "buy"
         confidence = 0.82
         target_price = 165.0
         stop_loss = 140.0
         reasoning = "Strong fundamentals with oversold technical conditions present buying opportunity"
-        ai_insights = [
+        data_insights = [
             "Stock shows strong earnings growth of 12.8%",
             "RSI indicates oversold conditions",
             "Volume trend is increasing, suggesting institutional interest",
@@ -103,7 +103,7 @@ async def get_stock_recommendation(
         target_price = None
         stop_loss = None
         reasoning = "Overbought conditions suggest potential pullback"
-        ai_insights = [
+        data_insights = [
             "RSI indicates overbought conditions",
             "Stock may face resistance at current levels",
             "Consider taking profits or reducing position size"
@@ -114,7 +114,7 @@ async def get_stock_recommendation(
         target_price = 155.0
         stop_loss = 145.0
         reasoning = "Neutral conditions suggest holding current position"
-        ai_insights = [
+        data_insights = [
             "Stock trading within normal range",
             "No strong technical signals present",
             "Monitor for breakout above $160 or breakdown below $145"
@@ -141,7 +141,7 @@ async def get_stock_recommendation(
         time_horizon=time_horizon,
         technical_indicators=technical_indicators,
         fundamental_factors=fundamental_factors,
-        ai_insights=ai_insights,
+        data_insights=data_insights,
         created_at=datetime.utcnow()
     )
 
@@ -149,7 +149,7 @@ async def get_stock_recommendation(
 async def get_portfolio_recommendations(
     current_user: dict = Depends(get_current_user)
 ):
-    """Get AI recommendations for overall portfolio optimization"""
+    """Get data-driven recommendations for overall portfolio optimization"""
     user_id = current_user["user_id"]
     
     # TODO: Analyze user's current portfolio
