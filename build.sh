@@ -2,11 +2,16 @@
 
 # Build script for Render deployment
 
-# Upgrade pip and install build tools
-pip install --upgrade pip setuptools wheel
+echo "Starting build process..."
 
-# Install dependencies
-pip install -r requirements.txt
+# Set Python to use specific version (ignore if system override)
+export PYTHON_VERSION=3.11.9
+
+# Upgrade pip and install build tools
+python -m pip install --upgrade pip setuptools wheel
+
+# Install dependencies with specific options
+python -m pip install -r requirements.txt --no-cache-dir
 
 # Create necessary directories
 mkdir -p models/saved
