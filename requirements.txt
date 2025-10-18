@@ -52,6 +52,3 @@ fastapi-websocket==0.1.5
 # Additional utilities
 psutil==5.9.6
 mangum==0.17.0
-
-pip install -U pip setuptools wheel && pip install -r requirements.txt
-start: python -m uvicorn main:app --host 0.0.0.0 --port $PORT
