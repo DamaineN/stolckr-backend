@@ -149,23 +149,63 @@ class AlphaVantageCollector:
         return sorted(parsed_data, key=lambda x: x["date"])
     
     def _get_mock_intraday_data(self, symbol: str, interval: str) -> List[Dict[str, Any]]:
-        """Generate mock intraday data when API key is not available"""
-        base_price = 150.0
-        data = []
+        """Generate realistic intraday data for professional demo"""
+        import random
         
-        for i in range(50):  # Generate 50 mock data points
-            timestamp = datetime.now().replace(hour=9+i//10, minute=(i*5)%60)
-            price_variation = (i % 10 - 5) * 0.5
+        # Professional stock prices
+        stock_prices = {
+            "AAPL": 225.47, "GOOGL": 172.89, "MSFT": 412.18, "TSLA": 242.83,
+            "NVDA": 139.76, "META": 583.45, "AMZN": 187.92, "NFLX": 701.28
+        }
+        
+        base_price = stock_prices.get(symbol.upper(), 150.0)
+        data = []
+        current_price = base_price
+        
+        # Generate realistic intraday data (market hours: 9:30 AM - 4:00 PM)
+        for i in range(78):  # 78 five-minute intervals in trading day
+            # Market open time calculation
+            minutes_from_open = i * 5
+            hour = 9 + minutes_from_open // 60
+            minute = 30 + (minutes_from_open % 60)
+            
+            if minute >= 60:
+                hour += 1
+                minute -= 60
+            
+            # Realistic intraday price movement
+            volatility = random.uniform(0.001, 0.008)  # 0.1% to 0.8% per 5-min interval
+            price_change = random.gauss(0, volatility)
+            current_price *= (1 + price_change)
+            
+            # Generate OHLC for interval
+            interval_volatility = random.uniform(0.001, 0.003)
+            open_price = current_price * random.uniform(0.999, 1.001)
+            high_price = current_price * (1 + interval_volatility)
+            low_price = current_price * (1 - interval_volatility)
+            close_price = current_price
+            
+            # Realistic volume patterns (higher at open/close)
+            base_volume = 100000 if symbol == "AAPL" else random.randint(50000, 200000)
+            if i < 6 or i > 72:  # First 30 min and last 30 min have higher volume
+                volume_multiplier = random.uniform(2.0, 4.0)
+            else:
+                volume_multiplier = random.uniform(0.8, 1.5)
+            
+            volume = int(base_volume * volume_multiplier)
+            
+            timestamp = datetime.now().replace(hour=hour, minute=minute, second=0)
             
             data.append({
                 "timestamp": timestamp.strftime("%Y-%m-%d %H:%M:%S"),
-                "open": base_price + price_variation,
-                "high": base_price + price_variation + 0.5,
-                "low": base_price + price_variation - 0.5,
-                "close": base_price + price_variation + 0.2,
-                "volume": 100000 + i * 1000
+                "open": round(open_price, 2),
+                "high": round(high_price, 2),
+                "low": round(low_price, 2),
+                "close": round(close_price, 2),
+                "volume": volume
             })
         
+        logger.info(f"Generated {len(data)} realistic intraday data points for {symbol}")
         return data
     
     def _get_mock_technical_indicator(self, symbol: str, indicator: str) -> List[Dict[str, Any]]:
