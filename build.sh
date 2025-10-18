@@ -61,7 +61,7 @@ python -m pip install statsmodels --no-cache-dir --only-binary=:all: || {
 # Install remaining packages from requirements
 echo "Step 5: Installing remaining packages..."
 python -m pip install fastapi==0.115.5 uvicorn[standard]==0.32.1 slowapi --no-cache-dir --only-binary=:all:
-python -m pip install motor pymongo requests yfinance --no-cache-dir --only-binary=:all:
+python -m pip install motor pymongo requests yfinance aiohttp --no-cache-dir --only-binary=:all:
 python -m pip install "pydantic==2.10.3" "pydantic-settings==2.6.1" python-dotenv --no-cache-dir --only-binary=:all:
 python -m pip install matplotlib seaborn plotly --no-cache-dir --only-binary=:all:
 

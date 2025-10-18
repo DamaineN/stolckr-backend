@@ -3,7 +3,7 @@ Configuration settings for Stock Market Prediction App
 """
 import os
 from typing import List
-from pydantic import Field
+from pydantic import Field, ConfigDict
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 
@@ -11,6 +11,12 @@ load_dotenv()
 
 class Settings(BaseSettings):
     """Application settings"""
+    
+    model_config = ConfigDict(
+        env_file=".env",
+        case_sensitive=False,
+        protected_namespaces=('settings_',)
+    )
     
     # API Keys
     alpha_vantage_api_key: str = Field(default="demo_key", env="ALPHA_VANTAGE_API_KEY")
@@ -32,8 +38,8 @@ class Settings(BaseSettings):
     debug_mode: bool = Field(default=True, env="DEBUG_MODE")
     log_level: str = Field(default="INFO", env="LOG_LEVEL")
     
-    # Model Configuration
-    model_save_path: str = Field(default="./models/saved/", env="MODEL_SAVE_PATH")
+    # Model Configuration  
+    ml_model_save_path: str = Field(default="./models/saved/", env="MODEL_SAVE_PATH")  # Renamed to avoid 'model_' prefix
     data_cache_path: str = Field(default="./data/cache/", env="DATA_CACHE_PATH")
     prediction_cache_hours: int = Field(default=1, env="PREDICTION_CACHE_HOURS")
     
@@ -52,10 +58,6 @@ class Settings(BaseSettings):
     def postgres_url(self) -> str:
         """Generate PostgreSQL connection URL"""
         return f"postgresql://{self.postgres_username}:{self.postgres_password}@{self.postgres_host}:{self.postgres_port}/{self.postgres_database}"
-    
-    class Config:
-        env_file = ".env"
-        case_sensitive = False
 
 # Global settings instance
 settings = Settings()
