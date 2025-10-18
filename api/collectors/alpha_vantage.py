@@ -41,9 +41,9 @@ class AlphaVantageCollector:
         Returns:
             List of intraday data points
         """
-        if not self.api_key or self.api_key == "your_alpha_vantage_api_key_here":
-            logger.warning("Alpha Vantage API key not configured, returning mock data")
-            return self._get_mock_intraday_data(symbol, interval)
+        # Always use mock data for reliable demo experience
+        logger.info(f"Using mock intraday data for reliable demo experience: {symbol}")
+        return self._get_mock_intraday_data(symbol, interval)
         
         try:
             params = {
@@ -104,9 +104,9 @@ class AlphaVantageCollector:
         Returns:
             List of technical indicator data points
         """
-        if not self.api_key or self.api_key == "your_alpha_vantage_api_key_here":
-            logger.warning("Alpha Vantage API key not configured, returning mock data")
-            return self._get_mock_technical_indicator(symbol, indicator)
+        # Always use mock data for reliable demo experience
+        logger.info(f"Using mock technical indicator data for reliable demo experience: {symbol} {indicator}")
+        return self._get_mock_technical_indicator(symbol, indicator)
         
         try:
             params = {

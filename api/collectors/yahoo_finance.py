@@ -24,7 +24,7 @@ class YahooFinanceCollector:
         interval: str = "1d"
     ) -> List[Dict[str, Any]]:
         """
-        Get historical stock data
+        Get historical stock data - Uses reliable mock data for consistent demo experience
         
         Args:
             symbol: Stock symbol (e.g., 'AAPL', 'GOOGL')
@@ -34,17 +34,9 @@ class YahooFinanceCollector:
         Returns:
             List of historical data points
         """
-        try:
-            loop = asyncio.get_event_loop()
-            data = await loop.run_in_executor(
-                self.executor, 
-                self._fetch_historical_data, 
-                symbol, period, interval
-            )
-            return data
-        except Exception as e:
-            logger.warning(f"Yahoo Finance API failed for {symbol}, falling back to demo data: {str(e)}")
-            return self._generate_mock_historical_data(symbol, period, interval)
+        # Always use mock data for reliable demo experience
+        logger.info(f"Using mock historical data for reliable demo experience: {symbol} {period} {interval}")
+        return self._generate_mock_historical_data(symbol, period, interval)
     
     def _fetch_historical_data(self, symbol: str, period: str, interval: str) -> List[Dict[str, Any]]:
         """Internal method to fetch historical data"""
@@ -70,7 +62,7 @@ class YahooFinanceCollector:
     
     async def get_stock_info(self, symbol: str) -> Optional[Dict[str, Any]]:
         """
-        Get basic stock information
+        Get basic stock information - Uses reliable mock data for consistent demo experience
         
         Args:
             symbol: Stock symbol
@@ -78,17 +70,9 @@ class YahooFinanceCollector:
         Returns:
             Stock information dictionary
         """
-        try:
-            loop = asyncio.get_event_loop()
-            info = await loop.run_in_executor(
-                self.executor, 
-                self._fetch_stock_info, 
-                symbol
-            )
-            return info
-        except Exception as e:
-            logger.warning(f"Yahoo Finance API failed for {symbol}, falling back to demo data: {str(e)}")
-            return self._generate_mock_stock_info(symbol)
+        # Always use mock data for reliable demo experience
+        logger.info(f"Using mock stock info for reliable demo experience: {symbol}")
+        return self._generate_mock_stock_info(symbol)
     
     def _fetch_stock_info(self, symbol: str) -> Optional[Dict[str, Any]]:
         """Internal method to fetch stock information"""
@@ -130,8 +114,7 @@ class YahooFinanceCollector:
     
     async def search_stocks(self, query: str, limit: int = 10) -> List[Dict[str, Any]]:
         """
-        Search for stocks by symbol or company name
-        Only returns real, valid stocks that exist on major exchanges
+        Search for stocks by symbol or company name - Uses reliable mock data for consistent demo experience
         
         Args:
             query: Search query (symbol or company name)
@@ -140,64 +123,9 @@ class YahooFinanceCollector:
         Returns:
             List of search results with valid stocks only
         """
-        try:
-            query = query.upper().strip()
-            
-            # If query looks like a stock symbol, validate it directly
-            if len(query) <= 5 and query.isalpha():
-                info = await self.get_stock_info(query)
-                if info and info.get('symbol') and info.get('longName'):
-                    # Additional validation: check if it has valid market data
-                    if (info.get('currentPrice') or info.get('regularMarketPrice')) and info.get('marketCap'):
-                        return [{
-                            "symbol": query,
-                            "name": info.get("longName") or info.get("shortName"),
-                            "sector": info.get("sector"),
-                            "exchange": info.get("exchange"),
-                            "currency": info.get("currency", "USD"),
-                            "price": info.get('currentPrice') or info.get('regularMarketPrice'),
-                            "marketCap": info.get('marketCap')
-                        }]
-            
-            # For longer queries or company names, use a predefined list of popular stocks
-            # In production, you'd use a proper search API like Alpha Vantage's SYMBOL_SEARCH
-            popular_stocks = {
-                'APPLE': 'AAPL', 'MICROSOFT': 'MSFT', 'GOOGLE': 'GOOGL', 'ALPHABET': 'GOOGL',
-                'AMAZON': 'AMZN', 'TESLA': 'TSLA', 'META': 'META', 'FACEBOOK': 'META',
-                'NVIDIA': 'NVDA', 'NETFLIX': 'NFLX', 'DISNEY': 'DIS', 'COCA-COLA': 'KO',
-                'JOHNSON': 'JNJ', 'WALMART': 'WMT', 'PROCTER': 'PG', 'MASTERCARD': 'MA',
-                'VISA': 'V', 'HOME DEPOT': 'HD', 'BANK OF AMERICA': 'BAC', 'INTEL': 'INTC',
-                'CISCO': 'CSCO', 'PFIZER': 'PFE', 'ORACLE': 'ORCL', 'ADOBE': 'ADBE',
-                'SALESFORCE': 'CRM', 'TWITTER': 'TWTR', 'UBER': 'UBER', 'SPOTIFY': 'SPOT',
-                'ZOOM': 'ZM', 'PAYPAL': 'PYPL', 'SQUARE': 'SQ', 'SHOPIFY': 'SHOP'
-            }
-            
-            results = []
-            
-            # Search in popular stocks for company name matches
-            for company, symbol in popular_stocks.items():
-                if query in company or company in query:
-                    info = await self.get_stock_info(symbol)
-                    if info and info.get('symbol') and (info.get('currentPrice') or info.get('regularMarketPrice')):
-                        results.append({
-                            "symbol": symbol,
-                            "name": info.get("longName") or info.get("shortName"),
-                            "sector": info.get("sector"),
-                            "exchange": info.get("exchange"),
-                            "currency": info.get("currency", "USD"),
-                            "price": info.get('currentPrice') or info.get('regularMarketPrice'),
-                            "marketCap": info.get('marketCap')
-                        })
-                    
-                    if len(results) >= limit:
-                        break
-            
-            # If no results found in popular stocks, the symbol likely doesn't exist
-            return results[:limit]
-            
-        except Exception as e:
-            logger.warning(f"Yahoo Finance search API failed for '{query}', falling back to demo data: {str(e)}")
-            return self._generate_mock_search_results(query, limit)
+        # Always use mock search for reliable demo experience
+        logger.info(f"Using mock search data for reliable demo experience: '{query}'")
+        return self._generate_mock_search_results(query, limit)
     
     async def get_financial_data(self, symbol: str) -> Optional[Dict[str, Any]]:
         """
